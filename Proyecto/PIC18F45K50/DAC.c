@@ -1,14 +1,14 @@
+/************************************************************************************************
+Company:
+Microside Technology Inc.
+Product Revision  :  1
+Device            :  X-TRAINER
+Driver Version    :  1.0
+************************************************************************************************/
+
 /*
-AUTOR: MICROSIDE TECHNOLOGY S.A. DE C.V.
-FECHA: JUNIO 2019
-*/
-
-
-/*
-
 Esta práctica consiste en realizar un control DAC para variar el voltaje de una
 salida analogica y visualizarlo en un LED.
-
 ———————Registros para configurar el modulo DAC——————-
 VREFCON1: Registro de configuración de voltajes de referencia
 BIT7 <DACEN> 1=DAC ACTIVO, 0=DAC DESACTIVO
