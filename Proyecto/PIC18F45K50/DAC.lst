@@ -1,29 +1,33 @@
-CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
+CCS PCH C Compiler, Version 5.115d, 1               30-ago.-23 16:28
+Compiler operating in Evaluation Mode
+To obtain a fully enabled compiler visit www.ccsinfo.com/products
 
-               Filename:   C:\Users\Martin Hdez\Desktop\18F45K50\Práctica 12 – DAC\DAC.lst
+               Filename:   C:\Users\victo\OneDrive\Documentos\X-TRAINER-hands-on\CCS\PIC18F\12-DAC-CCS-PIC18F4550-45K50\Proyecto\PIC18F45K50\DAC.lst
 
                ROM used:   210 bytes (1%)
                            Largest free fragment is 24362
                RAM used:   6 (0%) at main() level
                            7 (0%) worst case
-               Stack used: 0 locations
+               Stack used: 1 locations
                Stack size: 31
 
 *
 2000:  GOTO   2030
+.................... /************************************************************************************************
+.................... Company:
+.................... Microside Technology Inc.
+.................... File Name:
+.................... DAC.c
+.................... Product Revision  :  1
+.................... Device            :  X-TRAINER
+.................... Driver Version    :  1.0
+.................... ************************************************************************************************/
+.................... 
 .................... /*
-.................... AUTOR: MICROSIDE TECHNOLOGY S.A. DE C.V.
-.................... FECHA: JUNIO 2019
-.................... */
-.................... 
-.................... 
-.................... /*
-.................... 
 .................... Esta práctica consiste en realizar un control DAC para variar el voltaje de una
 .................... salida analogica y visualizarlo en un LED.
-.................... 
 .................... ———————Registros para configurar el modulo DAC——————-
-.................... VREFCON1: Registro de configuración de voltajes de referencia
+.................... VREFCON1: Registro de configuraci? de voltajes de referencia
 .................... BIT7 <DACEN> 1=DAC ACTIVO, 0=DAC DESACTIVO
 .................... BIT6 <DACLPS> 0=NEGATIVA REFERENCIA, 1=POSITIVA REFERENCIA
 .................... BIT5 <DACOUT> 0=PIN DE SALIDA DESACTIVADO, 1=PIN DE SALIDA ACTIVADO
@@ -38,10 +42,10 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 .................... VREFCON2 El valor del DAC se carga en este registro; DAC 5 bits (0-31 decimal)
 .................... */
 .................... 
-.................... #include <18F45K50.h>                          //Incluye el microcontrolador con el que se va a trabajar 
+.................... #include <18F45K50.h>                          // Incluye el microcontrolador con el que se va a trabajar 
 .................... //////////// Standard Header file for the PIC18F45K50 device ////////////////
 .................... ///////////////////////////////////////////////////////////////////////////
-.................... ////        (C) Copyright 1996, 2014 Custom Computer Services          ////
+.................... ////        (C) Copyright 1996, 2020 Custom Computer Services          ////
 .................... //// This source code may only be used by licensed users of the CCS C  ////
 .................... //// compiler.  This source code may only be distributed to other      ////
 .................... //// licensed users of the CCS C compiler.  No other use, reproduction ////
@@ -53,7 +57,7 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 .................... 
 .................... #list
 .................... 
-.................... #use delay(internal=48MHz)                     //Tipo de oscilador y frecuencia dependiendo del microcontrolador 
+.................... #use delay( internal=48MHz )                   // Tipo de oscilador y frecuencia dependiendo del microcontrolador 
 *
 2008:  CLRF   FEA
 200A:  MOVLW  06
@@ -75,16 +79,15 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 202A:  DECFSZ FEF,F
 202C:  BRA    2012
 202E:  RETURN 0
-.................... #build(reset=0x02000,interrupt=0x02008)        //Asigna los vectores de reset e interrupción para la versión con bootloader
-.................... #org 0x0000,0x1FFF {}                          //Reserva espacio en memoria para el bootloader
+.................... #build( reset=0x02000,interrupt=0x02008 )      // Asigna los vectores de reset e interrupci? para la versión con bootloader
+.................... #org 0x0000,0x1FFF {}                          // Reserva espacio en memoria para el bootloader
 .................... 
-.................... #BYTE VREFCON1=0XF7C                           //Posición del registro en la memoria del pic18f45k50
-.................... #BYTE VREFCON2=0XF7B
+.................... #BYTE VREFCON1 = 0XF7C                         // Posición del registro en la memoria del pic18f45k50
+.................... #BYTE VREFCON2 = 0XF7B
 .................... 
 .................... signed INT VALOR;
 .................... 
-.................... 
-.................... void main()
+.................... void main( void ) {
 2030:  CLRF   FF8
 2032:  BCF    FD0.7
 2034:  MOVLW  70
@@ -100,33 +103,27 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 2048:  CLRF   F9A
 204A:  CLRF   F99
 204C:  CLRF   F98
-.................... {
-....................       VREFCON1 = 0b10100000;                   //Registro de configuración de voltajes de referencia de DAC
+....................    VREFCON1 = 0b10100000;                      // Registro de configuración de voltajes de referencia de DAC
 204E:  MOVLW  A0
 2050:  MOVWF  F7C
-....................       set_tris_b (0x00);                       //Configuración del puerto B como salidas digitales
+....................    set_tris_b ( 0x00 );                        // Configuración del puerto B como salidas digitales
 2052:  MOVLW  00
 2054:  MOVWF  F93
 .................... 
-....................       while (true)
-.................... 
-....................           {
-....................                  for (VALOR = 0; VALOR < 32; VALOR++)
+....................    while ( 1 ) {
+....................        for ( VALOR = 0; VALOR < 32; VALOR++ ) {
 2056:  CLRF   04
 2058:  BTFSC  04.7
 205A:  BRA    2062
 205C:  MOVF   04,W
 205E:  SUBLW  1F
 2060:  BNC   2088
-.................... 
-....................                    {
-.................... 
-....................                        VREFCON2 = VALOR;       //Valor que se carga al DAC. 
+....................          VREFCON2 = VALOR;                     // Valor que se carga al DAC.
 2062:  MOVFF  04,F7B
-....................                        output_b (VALOR);       //Se pasa el valor al puerto B
+....................          output_b( VALOR );                    // Se pasa el valor al puerto B
 2066:  CLRF   F93
 2068:  MOVFF  04,F8A
-....................                        delay_ms (500);         //Retardo
+....................          delay_ms( 500 );                      // Retardo
 206C:  MOVLW  02
 206E:  MOVWF  05
 2070:  MOVLW  FA
@@ -141,10 +138,9 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 2082:  INCF   04,F
 2084:  MOVLB  F
 2086:  BRA    2058
+....................        }
 .................... 
-....................                     }
-.................... 
-....................                    delay_ms (2000);            //Retardo
+....................       delay_ms (2000);                         // Retardo
 2088:  MOVLW  08
 208A:  MOVWF  05
 208C:  MOVLW  FA
@@ -157,19 +153,17 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 209A:  MOVLB  F
 209C:  BRA    208C
 .................... 
-....................                   for (VALOR = 31; VALOR >= 0; VALOR--)
+....................       for ( VALOR = 31; VALOR >= 0; VALOR-- ) {
 209E:  MOVLW  1F
 20A0:  MOVWF  04
 20A2:  BTFSC  04.7
 20A4:  BRA    20C2
-.................... 
-....................                      {
-....................                           VREFCON2 = VALOR;     //Valor que se carga al DAC.
+....................          VREFCON2 = VALOR;                     // Valor que se carga al DAC.
 20A6:  MOVFF  04,F7B
-....................                           output_b (VALOR);     //Se pasa el valor al puerto B
+....................          output_b (VALOR);                     // Se pasa el valor al puerto B
 20AA:  CLRF   F93
 20AC:  MOVFF  04,F8A
-....................                           delay_ms (500);       //Retardo
+....................          delay_ms (500);                       // Retardo
 20B0:  MOVLW  02
 20B2:  MOVWF  05
 20B4:  MOVLW  FA
@@ -179,9 +173,9 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 20BC:  BRA    20B4
 20BE:  DECF   04,F
 20C0:  BRA    20A2
-....................                 }
+....................       }
 .................... 
-....................               delay_ms (2000);                  //Retardo
+....................       delay_ms (2000);                         // Retardo
 20C2:  MOVLW  08
 20C4:  MOVWF  05
 20C6:  MOVLW  FA
@@ -191,7 +185,7 @@ CCS PCH C Compiler, Version 5.090, 13314               01-dic.-20 11:58
 20CE:  BRA    20C6
 20D0:  MOVLB  F
 20D2:  BRA    2056
-....................        }
+....................    }
 .................... }
 20D4:  SLEEP 
 

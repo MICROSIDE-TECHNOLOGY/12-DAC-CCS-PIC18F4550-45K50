@@ -1,7 +1,7 @@
 [PROJECT]
 Target=DAC.hex
 Processor_Text=PIC18F45K50
-CCSVersion=5.090
+CCSVersion=5.115d
 Compiler=PCH
 [Target Data]
 FileList=DAC.c
@@ -9,15 +9,27 @@ FileList=DAC.c
 Type=4
 [mru-list]
 1=DAC.c
-[Units]
-Count=1
-1=DAC (main)
 
 [defines]
-buildcount=1
+buildcount=6
 
 [ProjectLog]
-Days=1
+Days=2
 D1=01-12-2020
 D1_L=1
 D1_L1=[43111]Project Closed.
+D2=30-08-2023
+D2_L=2
+D2_L1=[58621]Project Opened.
+D2_L2=[59357]Project Closed.
+
+[fileformats]
+forcecoff=0
+
+[Opened Files]
+1=DAC.c
+t1=1
+Count=1
+[Units]
+Count=1
+1=DAC (main)
